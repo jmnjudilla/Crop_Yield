@@ -1,0 +1,51 @@
+This are the queries for the database.
+
+SELECT * FROM crop_yield;
+
+--TOTAL PRODUCTION PER YEAR (Total yield)
+SELECT
+	Crop_Year,
+	SUM(Yield)
+FROM crop_yield
+GROUP BY 1;
+
+--AVERAGE YIELD PER CROP PER YEAR
+SELECT
+	Crop,
+    Crop_Year,
+    AVG(Yield)
+FROM crop_yield
+GROUP BY 1,2;
+
+--TOP 5 CROPS BY TOTAL PRODUCTION
+SELECT
+	Crop,
+    SUM(Production)
+FROM crop_yield
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5;
+
+--Yield per State
+SELECT 
+	State,
+    ROUND(SUM(Yield),2) as Yield
+FROM crop_yield
+GROUP BY 1
+ORDER BY 2 DESC;
+
+--Correlation-like Check: Yield vs Rainfall
+SELECT
+	Crop_Year,
+    ROUND(AVG(Annual_Rainfall),2) as avg_rainfall,
+    ROUND(AVG(Yield),2) as avg_yield
+FROM crop_yield
+GROUP BY 1;
+
+--Pesticide Usage Per Unit Production
+SELECT 
+	Crop,
+    ROUND(SUM(Pesticide) / NULLIF(SUM(Production),0),2) as pesticide_usage_per_unit_production
+FROM crop_yield
+GROUP BY 1;
+	
